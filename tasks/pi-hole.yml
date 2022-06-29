@@ -6,9 +6,9 @@
     mode: 0755
   become: false
 
-- name: Copy Pi-hole docker-compose template to Pi.
+- name: "Copy Pi-hole standalone docker-compose template to Pi. ({{ 'templates/pi-hole-docker-compose.yml.j2' if standalone else 'templates/pi-hole-unbound-docker-compose.yml.j2' }})"
   ansible.builtin.template:
-    src: templates/pi-hole-docker-compose.yml.j2
+    src: "{{ 'templates/pi-hole-docker-compose.yml.j2' if standalone else 'templates/pi-hole-unbound-docker-compose.yml.j2' }}"
     dest: "{{ config_dir }}/pi-hole/docker-compose.yml"
     mode: '0640'
   become: false

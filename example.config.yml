@@ -2,11 +2,17 @@
 # Location where configuration files will be stored.
 config_dir: '~'
 
-# Pi-hole configuration.
+# Pi-hole standard configuration.
 pihole_enable: true
 pihole_hostname: pihole
 pihole_timezone: America/Chicago
 pihole_password: "change-this-password"
+
+# If true, pihole standalone is installed
+# If false, pihole + unbound is installed
+standalone: true|false
+
+#unbound configuration
 FTLCONF_REPLY_ADDR4: "192.168.0.24"
 REV_SERVER: true
 REV_SERVER_DOMAIN: "local"
