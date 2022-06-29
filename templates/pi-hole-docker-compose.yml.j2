@@ -6,21 +6,27 @@ version: "3"
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:latest
+    image: cbcrowe/pihole-unbound:latest
     hostname: '{{ pihole_hostname }}'
+    domainname: '{{ DOMAIN_NAME }}'
     ports:
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
       - "80:80/tcp"
+      - "5335:5335/tcp" # Uncomment to enable unbound access on local server
       - "443:443/tcp"
     environment:
       TZ: '{{ pihole_timezone }}'
       WEBPASSWORD: '{{ pihole_password }}'
       ServerIP: '{{ ansible_facts['default_ipv4']['address'] }}'
-    dns:
-      - 127.0.0.1
-      - 8.8.8.8
+      PIHOLE_DNS_: 127.0.0.1#5335
+      REV_SERVER: '{{ REV_SERVER }}'
+      REV_SERVER_TARGET: '{{ REV_SERVER_TARGET }}'
+      REV_SERVER_DOMAIN: '{{ REV_SERVER_DOMAIN }}'
+      REV_SERVER_CIDR: '{{ REV_SERVER_CIDR }}'
+      DNSSEC: "true"
+      DNSMASQ_LISTENING: single
     volumes:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'

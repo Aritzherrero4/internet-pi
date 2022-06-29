@@ -7,7 +7,12 @@ pihole_enable: true
 pihole_hostname: pihole
 pihole_timezone: America/Chicago
 pihole_password: "change-this-password"
-
+FTLCONF_REPLY_ADDR4: "192.168.0.24"
+REV_SERVER: true
+REV_SERVER_DOMAIN: "local"
+REV_SERVER_TARGET: "192.168.0.1"
+REV_SERVER_CIDR: "192.168.0.0/24"
+DOMAIN_NAME: "pihole.local"
 # Internet monitoring configuration.
 monitoring_enable: true
 monitoring_grafana_admin_password: "admin"
