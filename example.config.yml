@@ -11,8 +11,10 @@ pihole_password: "change-this-password"
 # If true, pihole standalone is installed
 # If false, pihole + unbound is installed
 standalone: true|false
+use_dhcp_server: false # requires standalone to be false
 
 #unbound configuration
+MACVLAN_SERVER_IP: "192.168.0.24"
 FTLCONF_REPLY_ADDR4: "192.168.0.24"
 REV_SERVER: true
 REV_SERVER_DOMAIN: "local"

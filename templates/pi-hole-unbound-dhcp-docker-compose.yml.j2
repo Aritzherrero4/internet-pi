@@ -1,0 +1,55 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: cbcrowe/pihole-unbound:latest
+    hostname: '{{ pihole_hostname }}'
+    domainname: '{{ DOMAIN_NAME }}'
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "5335:5335/tcp" # Uncomment to enable unbound access on local server
+      - "443:443/tcp"
+    environment:
+      TZ: '{{ pihole_timezone }}'
+      WEBPASSWORD: '{{ pihole_password }}'
+      ServerIP: '{{ MACVLAN_SERVER_IP }}'
+      PIHOLE_DNS_: 127.0.0.1#5335
+      DHCP_ACTIVE: "true"
+      DHCP_START: "192.168.0.20"
+      DHCP_END: "192.168.0.240"
+      DHCP_ROUTER: "192.168.0.1"
+      PIHOLE_DOMAIN: '{{ REV_SERVER_DOMAIN }}'
+      DHCP_rapid_commit: "true"
+      DHCP_IPv6: "true"
+      DNS_BOGUS_PRIV: "true"
+      DNS_FQDN_REQUIRED: "true" 
+      #REV_SERVER: '{{ REV_SERVER }}'
+      #REV_SERVER_TARGET: '{{ REV_SERVER_TARGET }}'
+      #REV_SERVER_DOMAIN: '{{ REV_SERVER_DOMAIN }}'
+      #REV_SERVER_CIDR: '{{ REV_SERVER_CIDR }}'
+      DNSSEC: "true"
+      DNSMASQ_LISTENING: single
+    volumes:
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    networks:
+      pihole_net:
+        ipv4_address: '{{ MACVLAN_SERVER_IP }}'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+networks:
+  pihole_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
