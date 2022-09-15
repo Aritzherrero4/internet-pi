@@ -25,7 +25,8 @@ services:
       REV_SERVER_TARGET: '{{ REV_SERVER_TARGET }}'
       REV_SERVER_DOMAIN: '{{ REV_SERVER_DOMAIN }}'
       REV_SERVER_CIDR: '{{ REV_SERVER_CIDR }}'
-      DNSSEC: "true"
+      #CUSTOM_CACHE_SIZE: 20000 # 1/2 of the number of daily requests
+      DNSSEC: "false" # Recommended if using unbound
       DNSMASQ_LISTENING: single
     volumes:
       - './etc-pihole/:/etc/pihole/'
